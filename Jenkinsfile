@@ -2,32 +2,28 @@ pipeline {
     agent any
 
     environment {
-        // Use the ID you created in the Credentials section earlier
-        AWS_CREDS = credentials('aws-s3-backup-creds')
-        S3_BUCKET = 's3://my-jenkins-backup-bucket-unique-id'
+        // Correct way to bind AWS credentials in a declarative pipeline
+        AWS_ACCESS_KEY_ID     = credentials('aws-s3-backup-creds')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-s3-backup-creds')
+        S3_BUCKET             = 's3://my-jenkins-backup-bucket-unique-id'
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Pulls code from your Git repo
-                git branch: 'main', url: 'hhttps://github.com/azurecloudcl/pipeline/'
-                echo "Code successfully retrieved from Git."
-            }
-        }
-
+        // We removed the manual 'Checkout' stage because Jenkins does it automatically
+        
         stage('Archive & Compress') {
             steps {
-                echo "Packaging files..."
+                echo "Packaging files from workspace..."
+                // This archives the code Jenkins just pulled from Git
                 sh 'tar -czf jenkins-project.tar.gz .'
             }
         }
 
         stage('Upload to AWS S3') {
             steps {
-                echo "Pushing artifact to AWS Infrastructure..."
-                // Using AWS CLI with environment variables
-                sh "aws s3 cp jenkins-project.tar.gz ${S3_BUCKET}/backups2/"
+                echo "Pushing artifact to AWS..."
+                // AWS CLI automatically uses the AWS_ACCESS_KEY_ID env variables
+                sh "aws s3 cp jenkins-project.tar.gz ${S3_BUCKET}/backups/"
             }
         }
     }
@@ -41,7 +37,7 @@ pipeline {
             echo "Deployment to S3 successful!"
         }
         failure {
-            echo "Something went wrong. Check the logs above."
+            echo "Build failed. Please check the 'hhttps' typo in your SCM settings or Jenkinsfile."
         }
     }
 }
