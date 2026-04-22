@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Pulls code from your Git repo
-                git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
+                git branch: 'main', url: 'hhttps://github.com/azurecloudcl/pipeline/'
                 echo "Code successfully retrieved from Git."
             }
         }
