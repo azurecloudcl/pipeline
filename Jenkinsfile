@@ -27,7 +27,7 @@ pipeline {
             steps {
                 echo "Pushing artifact to AWS Infrastructure..."
                 // Using AWS CLI with environment variables
-                sh "aws s3 cp jenkins-project.tar.gz ${S3_BUCKET}/backups/"
+                sh "aws s3 cp jenkins-project.tar.gz ${S3_BUCKET}/backups2/"
             }
         }
     }
