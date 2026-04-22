@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo "Pushing artifact to AWS..."
                 // AWS CLI automatically uses the AWS_ACCESS_KEY_ID env variables
-                sh "aws s3 cp jenkins-project.tar.gz ${S3_BUCKET}/backups/"
+                sh "aws s3 cp jenkins-project.tar.gz ${S3_BUCKET}/backups2/"
             }
         }
     }
